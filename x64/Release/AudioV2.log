@@ -1,0 +1,6 @@
+﻿  playerInterface.cpp
+  main.cpp
+D:\project\AudioV2\playerInterface.cpp(26,29): warning C4129: '/': unrecognized character escape sequence
+  qrc_AudioV2.cpp
+  moc_playerInterface.cpp
+  AudioV2.vcxproj -> D:\project\AudioV2\x64\Release\AudioV2.exe
