@@ -9,6 +9,8 @@
 #include <QtWidgets>
 #include "ui_AudioV2.h"
 
+#include "spectrumProcess.h"
+
 QT_BEGIN_NAMESPACE
 class QCheckBox;
 class QGridLayout;
@@ -48,6 +50,7 @@ private:
     QAudioOutput * audioWidget = nullptr;
 
     QString currentVideoDirectory;
+    QString currentFilePath;
 
     QSlider *frameSlider = nullptr;
     QSlider* videoSlider = nullptr;
@@ -70,8 +73,6 @@ private:
 private slots:
     void open(const QString& fileName);
     void openFileAction();
-    //void playFunction();
-    //void pauseFunction();
     void playFunction();
     void mediaStateChanged(QMediaPlayer::PlaybackState state);
     void positionChanged(qint64 position);

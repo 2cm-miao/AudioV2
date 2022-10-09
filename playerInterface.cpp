@@ -25,24 +25,25 @@ AudioV2::AudioV2(QWidget *parent)
     ui.setupUi(this);
 
     currentVideoDirectory = QDir::homePath();
+    currentFilePath = nullptr;
 
     /*
     * action
     */
     //open file
     fileAction = new QAction(this);
-    fileAction->setText(QString::fromLocal8Bit("open"));
+    fileAction->setText("open");
     connect(fileAction, SIGNAL(triggered()), this, SLOT(openFileAction()));
 
     //show spectum
     spectumAction = new QAction(this);
-    spectumAction->setText(QString::fromLocal8Bit("spectum"));
+    spectumAction->setText("spectum");
     connect(spectumAction, SIGNAL(triggered()), this, SLOT(spectumProcessAction()));
 
     /*
     * menu bar
     */
-    fileMenuBar = menuBar()->addMenu(QString::fromLocal8Bit("file"));
+    fileMenuBar = menuBar()->addMenu("file");
     fileMenuBar->addAction(fileAction);
     fileMenuBar->addAction(spectumAction);
 
@@ -129,6 +130,7 @@ void AudioV2::open(const QString& fileName)
 void AudioV2::openFileAction()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open a Video"), currentVideoDirectory);
+    currentFilePath = fileName;
     if (!fileName.isEmpty())
         open(fileName);
 }
@@ -181,8 +183,11 @@ void AudioV2::spectumProcessAction()
     //m.show();
     //m.exec();
 
-    SpectrumProcess spectPro;
-    spectPro.exampleFunction();
+    SpectrumProcess* spectPro;
+    spectPro = new SpectrumProcess();
+    spectPro->show();
+
+    spectPro->exampleFunction(currentFilePath);
 }
 
 
