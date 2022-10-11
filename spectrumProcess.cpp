@@ -20,21 +20,21 @@
 #include "sigpack.h"
 using namespace sp;
 
-typedef struct WAV_HEADER {
-	uint8_t RIFF[4];        // RIFF Header Magic header
-	uint32_t chunkSize;     // RIFF Chunk Size
-	uint8_t WAVE[4];        // WAVE Header
-	uint8_t fmt[4];         // FMT header
-	uint32_t subchunk1Size; // Size of the fmt chunk
+typedef struct WAVEINFO {
+	uint8_t riffHeader[4];        // RIFF Header Magic header
+	uint32_t riffChunkSize;     // RIFF Chunk Size
+	uint8_t waveHeader[4];        // WAVE Header
+	uint8_t fmtHeader[4];         // FMT header
+	uint32_t fmtChunkSize; // Size of the fmt chunk
 	uint16_t audioFormat;   // Audio format
-	uint16_t numOfChan;     // Number of channels
+	uint16_t numOfChannels;     // Number of channels
 	uint32_t samplesPerSec; // Sampling Frequency in Hz
 	uint32_t bytesPerSec;   // bytes per second
 	uint16_t blockAlign;    // 2=16-bit mono, 4=16-bit stereo
 	uint16_t bitsPerSample; // Number of bits per sample
 	uint8_t subchunk2ID[4]; // "data"  string
 	uint32_t subchunk2Size; // Sampled data length
-} wav_header;
+} waveInfo;
 
 
 SpectrumProcess::SpectrumProcess(QWidget* parent)
@@ -62,7 +62,19 @@ SpectrumProcess::SpectrumProcess(QWidget* parent)
 SpectrumProcess::~SpectrumProcess() {
 }
 
+static int bits_to_bands(int bits) {
+	return (1 << (bits - 1)) + 1;
+}
+
 void SpectrumProcess::exampleFunction(const QString& filePath) {
+	//if (filePath.isEmpty()) {
+	//	QMessageBox m(this);
+	//	m.setWindowTitle("ERROR");
+	//	m.setText("Please Choose a file.");
+	//	m.show();
+	//	m.exec();
+	//}
+
 	// open file
 	//QByteArray cacheFilePath = filePath.toLatin1();
 	//char* charFilePath = cacheFilePath.data();
@@ -70,52 +82,42 @@ void SpectrumProcess::exampleFunction(const QString& filePath) {
 	FILE* wavFile = fopen("D:/apps/thx-sound-test/thx-sound-test.wav", "r");
 
 	// read info about the file
-	wav_header wavHeader;
-	fread(&wavHeader, 1, sizeof(wav_header), wavFile);
+	waveInfo waveInformation;
+	fread(&waveInformation, 1, sizeof(waveInfo), wavFile);
+	fclose(wavFile);
 
-	//// Read the data
-	//uint16_t Nb = wavHeader.bitsPerSample / 8;     // Number of bytes per sample
-	//uint32_t Ns = (wavHeader.chunkSize - 36) / Nb; // Number of samples
-	//arma::Mat<int16_t> x(wavHeader.numOfChan, Ns / wavHeader.numOfChan);
-	//fread(x.memptr(), Nb, Ns, wavFile);
-	//fclose(wavFile);
+	// process the data of audio
+	uint16_t bytesPerSample = waveInformation.bitsPerSample / 8; // Number of bytes per sample
+	uint32_t numsOfSamples = (waveInformation.riffChunkSize - 36) / bytesPerSample; // Number of samples
 
-	//// Get the left channel
-	//arma::Col<int16_t> x_left = x.row(0).t();
-
-	//// Calculate the spectrogram
-	//const int FFT_SIZE = 1024;
-	//const int FFT_OVERLAP = 128;
-	//arma::mat P = 10 * log10(abs(specgram(x_left, FFT_SIZE, FFT_OVERLAP)));
-
-	//system("pause");
-
-	//// Plot
-	//arma::mat Q = P.rows(FFT_SIZE / 2, FFT_SIZE - 1); // Cut out the positive parts
-	//gplot gp0;
-	//gp0.window("Deep note spectrogram", 100, 100, 1200, 400);
-	//gp0.send2gp("unset tics");
-	//gp0.send2gp("unset colorbox");
-	//gp0.image(Q);
-	//return;
-
-
-
-	QImage image(100, 100, QImage::Format_RGB32);
+	// draw the spectrumprocess image
+	QImage image(numsOfSamples, bits_to_bands(waveInformation.bitsPerSample), QImage::Format_RGB32);
+	//QImage image(width() - 60 - 90, 500, QImage::Format_RGB32);
 	QRgb value;
 
-	value = qRgb(189, 149, 39); // 0xffbd9527
-	image.setPixel(1, 1, value);
+	for (int y = 0; y < bits_to_bands(waveInformation.bitsPerSample); y++) {
+		value = qRgb(122, 163, 39);
+		for (int j = 0; j < numsOfSamples; ++j) {
+			image.setPixel(j, bits_to_bands(waveInformation.bitsPerSample) - y - 1, value);
+		}
+	}
 
-	value = qRgb(122, 163, 39); // 0xff7aa327
-	image.setPixel(0, 1, value);
-	image.setPixel(1, 0, value);
+	//value = qRgb(122, 163, 39); // 0xff7aa327
+	//image.setColor(0, value);
 
-	value = qRgb(237, 187, 51); // 0xffedba31
-	image.setPixel(2, 1, value);
+	//value = qRgb(237, 187, 51); // 0xffedba31
+	//image.setColor(1, value);
 
-	fileNameLabel->setText(fileName);
+	//value = qRgb(189, 149, 39); // 0xffbd9527
+	//image.setColor(2, value);
+
+	//image.setPixel(0, 1, 0);
+	//image.setPixel(1, 0, 0);
+	//image.setPixel(1, 1, 2);
+	//image.setPixel(2, 1, 1);
+
+	fileNameLabel->setText(filePath);
 	imageLabel->setPixmap(QPixmap::fromImage(image));
 
-	//myLabel.show();
+
 }
