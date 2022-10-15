@@ -1,4 +1,4 @@
-#include <qpushbutton.h>
+﻿#include <qpushbutton.h>
 #include <QMessageBox>
 #include <QCheckBox>
 #include <QFileDialog>
@@ -19,18 +19,19 @@
 #include "spectrumProcess.h"
 #include "sigpack.h"
 using namespace sp;
+using namespace arma;
 
 typedef struct WAVEINFO {
-	uint8_t riffHeader[4];        // RIFF Header Magic header
-	uint32_t riffChunkSize;     // RIFF Chunk Size
-	uint8_t waveHeader[4];        // WAVE Header
-	uint8_t fmtHeader[4];         // FMT header
-	uint32_t fmtChunkSize; // Size of the fmt chunk
+	uint8_t riffHeader[4];  // RIFF Header Magic header
+	uint32_t riffChunkSize; // RIFF Chunk Size
+	uint8_t waveHeader[4];  // WAVE Header
+	uint8_t fmtHeader[4];   // FMT header
+	uint32_t fmtChunkSize;  // Size of the fmt chunk
 	uint16_t audioFormat;   // Audio format
-	uint16_t numOfChannels;     // Number of channels
-	uint32_t samplesPerSec; // Sampling Frequency in Hz
-	uint32_t bytesPerSec;   // bytes per second
-	uint16_t blockAlign;    // 2=16-bit mono, 4=16-bit stereo
+	uint16_t numOfChannels; // Number of channels
+	uint32_t samplesPerSec; // Sampling Frequency in Hz  采样率
+	uint32_t bytesPerSec;   // bytes per second   音频文件大小
+	uint16_t blockAlign;    // 2=16-bit mono, 4=16-bit stereo  判断单声道或是双声道
 	uint16_t bitsPerSample; // Number of bits per sample
 	uint8_t subchunk2ID[4]; // "data"  string
 	uint32_t subchunk2Size; // Sampled data length
@@ -84,40 +85,38 @@ void SpectrumProcess::exampleFunction(const QString& filePath) {
 	// read info about the file
 	waveInfo waveInformation;
 	fread(&waveInformation, 1, sizeof(waveInfo), wavFile);
-	fclose(wavFile);
 
 	// process the data of audio
 	uint16_t bytesPerSample = waveInformation.bitsPerSample / 8; // Number of bytes per sample
 	uint32_t numsOfSamples = (waveInformation.riffChunkSize - 36) / bytesPerSample; // Number of samples
 
+	Mat<int16_t> x(waveInformation.numOfChannels, numsOfSamples / waveInformation.numOfChannels);
+	fread(x.memptr(), bytesPerSample, numsOfSamples, wavFile);
+	fclose(wavFile);
+
+	// Get the left channel
+	Col<int16_t> x_left = x.row(0).t();  // .t()的作用是转置
+
+	// Calculate the spectrogram
+	const int FFT_SIZE = 1024;
+	const int FFT_OVERLAP = 128;
+	mat P = 10 * log10(abs(specgram(x_left, FFT_SIZE, FFT_OVERLAP)));
+	mat Q = P.rows(FFT_SIZE / 2, FFT_SIZE - 1); // Cut out the positive parts
+
 	// draw the spectrumprocess image
-	QImage image(numsOfSamples, bits_to_bands(waveInformation.bitsPerSample), QImage::Format_RGB32);
+	QImage image(Q.n_cols, Q.n_rows, QImage::Format_RGB32);
 	//QImage image(width() - 60 - 90, 500, QImage::Format_RGB32);
 	QRgb value;
 
-	for (int y = 0; y < bits_to_bands(waveInformation.bitsPerSample); y++) {
+	mat A_row = Q.submat(span(1, 3), span(1, 3));
+
+	for (int y = 0; y < Q.n_rows; y++) {
 		value = qRgb(122, 163, 39);
-		for (int j = 0; j < numsOfSamples; ++j) {
-			image.setPixel(j, bits_to_bands(waveInformation.bitsPerSample) - y - 1, value);
+		for (int j = 0; j < Q.n_cols; ++j) {
+			image.setPixel(j, Q.n_rows - y - 1, value);
 		}
 	}
 
-	//value = qRgb(122, 163, 39); // 0xff7aa327
-	//image.setColor(0, value);
-
-	//value = qRgb(237, 187, 51); // 0xffedba31
-	//image.setColor(1, value);
-
-	//value = qRgb(189, 149, 39); // 0xffbd9527
-	//image.setColor(2, value);
-
-	//image.setPixel(0, 1, 0);
-	//image.setPixel(1, 0, 0);
-	//image.setPixel(1, 1, 2);
-	//image.setPixel(2, 1, 1);
-
 	fileNameLabel->setText(filePath);
 	imageLabel->setPixmap(QPixmap::fromImage(image));
-
-
 }
