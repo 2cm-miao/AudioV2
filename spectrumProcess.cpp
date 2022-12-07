@@ -101,15 +101,14 @@ void SpectrumProcess::exampleFunction(const QString& filePath) {
 	for (int i = 0; i < numsOfSamples / 2; i++)
 	{
 		in[i][0] = x(0, i);
-		in[i][1] = (int16_t)0;
+		in[i][1] = (double)0;
 	}
 
 	fftw_plan p = fftw_plan_dft_1d(numsOfSamples / 2, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
-
 	fftw_execute(p);
 
 	// power
-	Col<int16_t> dests(numsOfSamples / 2);
+	Col<double> dests(numsOfSamples / 2);
 	for (int i = 0; i < (numsOfSamples / 2); i++) {
 		dests[i] = sqrt(out[i][0] * out[i][0] + out[i][1] * out[i][1]);
 	}
@@ -117,30 +116,105 @@ void SpectrumProcess::exampleFunction(const QString& filePath) {
 	fftw_destroy_plan(p);
 	fftw_cleanup();
 
-	// Calculate the spectrogram size
-	const int FFT_SIZE = 1024;
-	const int FFT_OVERLAP = 128;
-	//mat P = 10 * log10(abs(specgram(dests, FFT_SIZE, FFT_OVERLAP)));  // calculate the power of data
-	mat P = specgram(dests, FFT_SIZE, FFT_OVERLAP);
-	//mat Q = P.rows(FFT_SIZE / 2, FFT_SIZE - 1); // Cut out the positive parts
+	//double kk = 200.0;
+	//double kkk = 0.0;
+	int kk = 0;
+	double dB = 0.0;
+	Col<double> dbDest(numsOfSamples / 2);
+	for (int i = 0; i < numsOfSamples / 2; i++) {
+		dbDest[i] = log10(dests[i]) * 20;
 
+		if (i >= 1) {
+			kk = waveInformation.samplesPerSec * (i - 1) / (numsOfSamples / 2);
+			dB = dbDest[i];
 
-	// draw the spectrumprocess image
-	QImage image(P.n_cols, P.n_rows, QImage::Format_RGB32);
-	uint32_t value;
-
-	for (int y = 0; y < P.n_rows; y++) {
-		//value = qRgb(122, 163, 39);
-		for (int j = 0; j < P.n_cols; ++j) {
-			image.setPixel(j, y, setColor(P(y, j)));
+			if (kk > 2000) {
+				int kkk = kk;
+			}
 		}
 	}
+
+	int freq = waveInformation.samplesPerSec / 2; //采样频率
+	int audioLength = (numsOfSamples / 2) / waveInformation.samplesPerSec;
+
+	QImage image(1100, 500, QImage::Format_RGB32); // width height
+	Mat <int> imageIndex(freq, audioLength);
+	for (int i = 1; i < numsOfSamples / 2; i++) {
+		int y = i % audioLength;
+		int x = freq * (i - 1) / (numsOfSamples / 2);
+		imageIndex(x, y) = dbDest[i];
+	}
+
+	int indX = 0;
+	for (int x = 0; x < imageIndex.n_rows; x += 45) {
+		for (int y = 0; y < imageIndex.n_cols; y++) {
+			uint32_t kk = setColor(imageIndex(x, y));
+			image.setPixel(y, indX, kk);
+		}
+		indX++;
+	}
+
+
+	//const int FFT_SIZE = 1024;
+	//const int FFT_OVERLAP = 128;
+	//mat P = 20 * log10(abs(specgram(dests, FFT_SIZE, FFT_OVERLAP)));  // calculate the power of data
+	//mat Q = P.rows(FFT_SIZE / 2, FFT_SIZE - 1); // Cut out the positive parts
+
+	//int imageWidth = Q.n_rows;
+	//int imageLength = Q.n_cols;
+
+	//// draw the spectrumprocess image
+	//QImage image(imageLength, imageWidth, QImage::Format_RGB32);
+	//uint32_t value;
+
+	//for (int y = 0; y < imageWidth; y++) {
+	//	for (int j = 0; j < imageLength; ++j) {
+	//		//double kk = Q(y, j);
+	//		image.setPixel(j, y, setColor(Q(y, j)));
+	//		//image.setPixel(j, imageWidth - y - 1, setColor(y / (double)imageWidth));
+	//	}
+	//}
 
 	fileNameLabel->setText(filePath);
 	imageLabel->setPixmap(QPixmap::fromImage(image));
 }
 
-uint32_t SpectrumProcess::setColor(int16_t level) {
+uint32_t SpectrumProcess::setColor(double level) {
+	level /= 200;
+	double le = level;
+	double r = 0.0;
+	if (level >= 0.13 && level < 0.73) {
+		r = sin((level - 0.13) / 0.60 * M_PI / 2.0);
+	}
+	else if (level >= 0.73) {
+		r = 1.0;
+	}
+
+	double g = 0.0;
+	if (level >= 0.6 && level < 0.91) {
+		g = sin((level - 0.6) / 0.31 * M_PI / 2.0);
+	}
+	else if (level >= 0.91) {
+		g = 1.0;
+	}
+
+	double b = 0.0;
+	if (level < 0.60) {
+		b = 0.5 * sin(level / 0.6 * M_PI);
+	}
+	else if (level >= 0.78) {
+		b = (level - 0.78) / 0.22;
+	}
+
+	// Pack RGB values into a 32-bit uint.
+	uint32_t rr = (uint32_t)(r * 255.0 + 0.5);
+	uint32_t gg = (uint32_t)(g * 255.0 + 0.5);
+	uint32_t bb = (uint32_t)(b * 255.0 + 0.5);
+	return (rr << 16) + (gg << 8) + bb;
+}
+
+uint32_t SpectrumProcess::setColor1(double level)
+{
 	level *= 0.6625;
 	double r = 0.0, g = 0.0, b = 0.0;
 	if (level >= 0 && level < 0.15) {
@@ -180,9 +254,8 @@ uint32_t SpectrumProcess::setColor(int16_t level) {
 	uint32_t rr = (uint32_t)(r * cf + 0.5);
 	uint32_t gg = (uint32_t)(g * cf + 0.5);
 	uint32_t bb = (uint32_t)(b * cf + 0.5);
-
 	return (rr << 16) + (gg << 8) + bb;
-	//return 32;
 }
+
 
 

@@ -29,7 +29,9 @@ public:
 	~SpectrumProcess();
 
 	void exampleFunction(const QString& fileName);
-	uint32_t setColor(int16_t level);
+	uint32_t setColor(double level);
+
+	uint32_t setColor1(double level);
 
 private:
 	Ui::MainWindow ui;

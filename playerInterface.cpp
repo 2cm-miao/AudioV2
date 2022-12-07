@@ -1,4 +1,4 @@
-#include "playerInterface.h"
+﻿#include "playerInterface.h"
 #include "spectrumProcess.h"
 
 #include <qpushbutton.h>
@@ -48,24 +48,6 @@ AudioV2::AudioV2(QWidget *parent)
     fileMenuBar->addAction(spectumAction);
 
     /*
-    * buttons
-    */
-    QSize iconSize(36, 36);
-
-    //play button
-    playButton = new QToolButton;
-    playButton -> setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-    playButton -> setIconSize(iconSize);
-    playButton -> setToolTip(tr("Play"));
-    playButton -> setEnabled(false);
-    connect(playButton, &QAbstractButton::clicked, this, &AudioV2::playFunction);
-
-    //video slider
-    videoSlider = new QSlider(Qt::Horizontal);
-    videoSlider->setRange(0, 0);
-    connect(videoSlider, &QAbstractSlider::sliderMoved, this, &AudioV2::setPosition);
-
-    /*
     * video player
     */
     mediaPlayer = new QMediaPlayer();
@@ -77,38 +59,103 @@ AudioV2::AudioV2(QWidget *parent)
     connect(mediaPlayer, &QMediaPlayer::playbackStateChanged, this, &AudioV2::mediaStateChanged);
     connect(mediaPlayer, &QMediaPlayer::positionChanged, this, &AudioV2::positionChanged);
     connect(mediaPlayer, &QMediaPlayer::durationChanged, this, &AudioV2::durationChanged);
+    connect(mediaPlayer, SIGNAL(durationChanged(qint64)),this, SLOT(getDuration(qint64)));
 
+    /*
+    * buttons and labels
+    */
+    QSize iconSize(30, 30);
+
+    // play button
+    playButton = new QToolButton;
+    playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+    playButton->setIconSize(iconSize);
+    playButton->setToolTip(tr("Play"));
+    playButton->setEnabled(false);
+    connect(playButton, &QAbstractButton::clicked, this, &AudioV2::playFunction);
+
+    // time label
+    currentTimeLabel = new QLabel;
+    currentTimeLabel->setText("00:00:00");
+    currentTimeLabel->setFixedSize(43, 10);
+
+    slashLabel = new QLabel;
+    slashLabel->setText("/");
+    slashLabel->setFixedSize(5, 10);
+
+    timeLabel = new QLabel;
+    timeLabel->setText("00:00:00");
+    timeLabel->setFixedSize(43, 10);
+
+    // volume button
+    volumeButton = new QToolButton;
+    volumeButton->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+    volumeButton->setIconSize(iconSize);
+
+    // seekBackward button
+    seekBackwardButton = new QToolButton;
+    seekBackwardButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
+    seekBackwardButton->setIconSize(iconSize);
+
+    // seekForward button
+    seekForwardButton = new QToolButton;
+    seekForwardButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
+    seekForwardButton->setIconSize(iconSize);
+
+    //video slider
+    videoSlider = new QSlider(Qt::Horizontal);
+    videoSlider->setRange(0, 0);
+    connect(videoSlider, &QAbstractSlider::sliderMoved, this, &AudioV2::setPosition);
 
     /*
     * layouts
     */
-    //button layout
-    buttonsLayout = new QHBoxLayout;
-    buttonsLayout->addWidget(playButton);
-    //buttonsLayout->addWidget(pauseButton);
-    buttonsLayout->addWidget(videoSlider);
+    // left button layout
+    leftButtonsLayout = new QHBoxLayout;
+    leftButtonsLayout->addWidget(seekBackwardButton);
+    leftButtonsLayout->addWidget(playButton);
+    leftButtonsLayout->addWidget(seekForwardButton);
+    leftButtonsLayout->addWidget(currentTimeLabel);
+    leftButtonsLayout->addWidget(slashLabel);
+    leftButtonsLayout->addWidget(timeLabel);
+    leftButtonsLayout->setAlignment(Qt::AlignLeft);
 
-    //player layout
-    playerLayout = new QHBoxLayout;
-    playerLayout -> addWidget(videoWidget);
+    // right button layout
+    rightButtonsLayout = new QHBoxLayout;
+    rightButtonsLayout->addWidget(volumeButton);
+    rightButtonsLayout->setAlignment(Qt::AlignRight);
 
-    //main layout
+    // button layout
+    buttonLayout = new QHBoxLayout;
+    buttonLayout->addLayout(leftButtonsLayout);
+    buttonLayout->addLayout(rightButtonsLayout);
+
+    // slider layout
+    sliderLayout = new QHBoxLayout;
+    sliderLayout->addWidget(videoSlider);
+
+    // player layout
+    playerLayout = new QHBoxLayout; 
+    playerLayout->addWidget(videoWidget);
+
+    // main layout
     widget = new QWidget();
     mainLayout = new QVBoxLayout(widget);
-    mainLayout -> addLayout(playerLayout);
-    mainLayout -> addLayout(buttonsLayout);
-
+    mainLayout->addLayout(playerLayout);
+    mainLayout->addLayout(sliderLayout);
+    mainLayout->addLayout(buttonLayout);
 
     this -> setCentralWidget(widget);
     setLayout(mainLayout);
 
     setWindowTitle(tr("Video Player"));
-    resize(1100, 700);
+    resize(1200, 700);
 }
 
 AudioV2::~AudioV2()
 {}
 
+// open file function
 void AudioV2::open(const QString& fileName)
 {
     currentVideoDirectory = QFileInfo(fileName).path();
@@ -127,6 +174,7 @@ void AudioV2::open(const QString& fileName)
     playButton->setEnabled(true);
 }
 
+// open file action
 void AudioV2::openFileAction()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open a Video"), currentVideoDirectory);
@@ -135,6 +183,8 @@ void AudioV2::openFileAction()
         open(fileName);
 }
 
+
+// play the video function
 void AudioV2::playFunction()
 {
     switch (mediaPlayer->playbackState()) {
@@ -147,6 +197,7 @@ void AudioV2::playFunction()
     }
 }
 
+// change state of video
 void AudioV2::mediaStateChanged(QMediaPlayer::PlaybackState state)
 {
     switch (state) {
@@ -159,21 +210,44 @@ void AudioV2::mediaStateChanged(QMediaPlayer::PlaybackState state)
     }
 }
 
+// set position of slide
 void AudioV2::setPosition(int position)
 {
     mediaPlayer->setPosition(position);
 }
 
-void AudioV2::positionChanged(qint64 position)
+// change position of slide
+void AudioV2::positionChanged(qint64 value)
 {
-    videoSlider->setValue(position);
+    videoSlider->setValue(value);
+    currentTimeLabel->setText(QTime(0, 0, 0).addMSecs(int(value)).toString(QString::fromLatin1("HH:mm:ss")));
 }
 
+// convert playtime to string
+void AudioV2::convertPlaytimeToString(qint64 durationTime)
+{
+    int h, m, s;
+    durationTime /= 1000;
+    h = (int)durationTime / 3600;
+    m = ((int)durationTime - h * 3600) / 60;
+    s = (int)durationTime - h * 3600 - m * 60;
+    timeLabel->setText(QString("%1:%2:%3").arg(h).arg(m).arg(s));
+}
+
+// get duration of the video
+void AudioV2::getDuration(qint64 durationTime)
+{
+    durationTime = mediaPlayer->duration();
+    convertPlaytimeToString(durationTime);
+}
+
+// change the current duration
 void AudioV2::durationChanged(qint64 duration)
 {
     videoSlider->setRange(0, duration);
 }
 
+// spectum process function
 void AudioV2::spectumProcessAction()
 {
     //QMessageBox m(this);

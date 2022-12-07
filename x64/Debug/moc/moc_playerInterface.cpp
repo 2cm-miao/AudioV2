@@ -24,7 +24,7 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_AudioV2_t {
-    uint offsetsAndSizes[30];
+    uint offsetsAndSizes[36];
     char stringdata0[8];
     char stringdata1[5];
     char stringdata2[1];
@@ -40,6 +40,9 @@ struct qt_meta_stringdata_AudioV2_t {
     char stringdata12[9];
     char stringdata13[12];
     char stringdata14[21];
+    char stringdata15[12];
+    char stringdata16[13];
+    char stringdata17[24];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_AudioV2_t::offsetsAndSizes) + ofs), len 
@@ -59,7 +62,10 @@ static const qt_meta_stringdata_AudioV2_t qt_meta_stringdata_AudioV2 = {
         QT_MOC_LITERAL(128, 15),  // "durationChanged"
         QT_MOC_LITERAL(144, 8),  // "duration"
         QT_MOC_LITERAL(153, 11),  // "setPosition"
-        QT_MOC_LITERAL(165, 20)   // "spectumProcessAction"
+        QT_MOC_LITERAL(165, 20),  // "spectumProcessAction"
+        QT_MOC_LITERAL(186, 11),  // "getDuration"
+        QT_MOC_LITERAL(198, 12),  // "durationTime"
+        QT_MOC_LITERAL(211, 23)   // "convertPlaytimeToString"
     },
     "AudioV2",
     "open",
@@ -75,7 +81,10 @@ static const qt_meta_stringdata_AudioV2_t qt_meta_stringdata_AudioV2 = {
     "durationChanged",
     "duration",
     "setPosition",
-    "spectumProcessAction"
+    "spectumProcessAction",
+    "getDuration",
+    "durationTime",
+    "convertPlaytimeToString"
 };
 #undef QT_MOC_LITERAL
 
@@ -85,7 +94,7 @@ static const uint qt_meta_data_AudioV2[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+      10,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -93,14 +102,16 @@ static const uint qt_meta_data_AudioV2[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,   62,    2, 0x08,    1 /* Private */,
-       4,    0,   65,    2, 0x08,    3 /* Private */,
-       5,    0,   66,    2, 0x08,    4 /* Private */,
-       6,    1,   67,    2, 0x08,    5 /* Private */,
-       9,    1,   70,    2, 0x08,    7 /* Private */,
-      11,    1,   73,    2, 0x08,    9 /* Private */,
-      13,    1,   76,    2, 0x08,   11 /* Private */,
-      14,    0,   79,    2, 0x08,   13 /* Private */,
+       1,    1,   74,    2, 0x08,    1 /* Private */,
+       4,    0,   77,    2, 0x08,    3 /* Private */,
+       5,    0,   78,    2, 0x08,    4 /* Private */,
+       6,    1,   79,    2, 0x08,    5 /* Private */,
+       9,    1,   82,    2, 0x08,    7 /* Private */,
+      11,    1,   85,    2, 0x08,    9 /* Private */,
+      13,    1,   88,    2, 0x08,   11 /* Private */,
+      14,    0,   91,    2, 0x08,   13 /* Private */,
+      15,    1,   92,    2, 0x08,   14 /* Private */,
+      17,    1,   95,    2, 0x08,   16 /* Private */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QString,    3,
@@ -111,6 +122,8 @@ static const uint qt_meta_data_AudioV2[] = {
     QMetaType::Void, QMetaType::LongLong,   12,
     QMetaType::Void, QMetaType::Int,   10,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::LongLong,   16,
+    QMetaType::Void, QMetaType::LongLong,   16,
 
        0        // eod
 };
@@ -129,6 +142,8 @@ void AudioV2::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         case 5: _t->durationChanged((*reinterpret_cast< std::add_pointer_t<qint64>>(_a[1]))); break;
         case 6: _t->setPosition((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 7: _t->spectumProcessAction(); break;
+        case 8: _t->getDuration((*reinterpret_cast< std::add_pointer_t<qint64>>(_a[1]))); break;
+        case 9: _t->convertPlaytimeToString((*reinterpret_cast< std::add_pointer_t<qint64>>(_a[1]))); break;
         default: ;
         }
     }
@@ -142,7 +157,7 @@ const QMetaObject AudioV2::staticMetaObject = { {
     nullptr,
 qt_incomplete_metaTypeArray<qt_meta_stringdata_AudioV2_t
 , QtPrivate::TypeAndForceComplete<AudioV2, std::true_type>
-, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<const QString &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QMediaPlayer::PlaybackState, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<qint64, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<qint64, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>
+, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<const QString &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QMediaPlayer::PlaybackState, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<qint64, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<qint64, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<qint64, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<qint64, std::false_type>
 
 
 >,
@@ -169,13 +184,13 @@ int AudioV2::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 8)
+        if (_id < 10)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 10;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 8)
+        if (_id < 10)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 8;
+        _id -= 10;
     }
     return _id;
 }

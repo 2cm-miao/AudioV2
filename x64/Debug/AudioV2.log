@@ -1,19 +1,2 @@
-﻿  spectrumProcess.cpp
-D:\apps\sigpack-1.2.7\sigpack-1.2.7\sigpack\sigpack.h(1,1): warning C4828: The file contains a character starting at offset 0xee that is illegal in the current source character set (codepage 65001).
-D:\apps\sigpack-1.2.7\sigpack-1.2.7\sigpack\sigpack.h(1,1): warning C4828: The file contains a character starting at offset 0x11f that is illegal in the current source character set (codepage 65001).
-D:\apps\sigpack-1.2.7\sigpack-1.2.7\sigpack\sigpack.h(1,1): warning C4828: The file contains a character starting at offset 0x1af that is illegal in the current source character set (codepage 65001).
-D:\apps\sigpack-1.2.7\sigpack-1.2.7\sigpack\sigpack.h(1,1): warning C4828: The file contains a character starting at offset 0x23e that is illegal in the current source character set (codepage 65001).
-D:\apps\sigpack-1.2.7\sigpack-1.2.7\sigpack\sigpack.h(1,1): warning C4828: The file contains a character starting at offset 0x2a6 that is illegal in the current source character set (codepage 65001).
-D:\apps\sigpack-1.2.7\sigpack-1.2.7\sigpack\sigpack.h(1,1): warning C4828: The file contains a character starting at offset 0x2e5 that is illegal in the current source character set (codepage 65001).
-D:\apps\sigpack-1.2.7\sigpack-1.2.7\sigpack\sigpack.h(1,1): warning C4828: The file contains a character starting at offset 0x33d that is illegal in the current source character set (codepage 65001).
-D:\apps\sigpack-1.2.7\sigpack-1.2.7\sigpack\sigpack.h(1,1): warning C4828: The file contains a character starting at offset 0x392 that is illegal in the current source character set (codepage 65001).
-D:\apps\sigpack-1.2.7\sigpack-1.2.7\sigpack\sigpack.h(1,1): warning C4828: The file contains a character starting at offset 0x40f that is illegal in the current source character set (codepage 65001).
-D:\apps\sigpack-1.2.7\sigpack-1.2.7\sigpack\sigpack.h(1,1): warning C4828: The file contains a character starting at offset 0x46a that is illegal in the current source character set (codepage 65001).
-D:\apps\sigpack-1.2.7\sigpack-1.2.7\sigpack\sigpack.h(1,1): warning C4828: The file contains a character starting at offset 0x4b5 that is illegal in the current source character set (codepage 65001).
-D:\apps\sigpack-1.2.7\sigpack-1.2.7\sigpack\sigpack.h(1,1): warning C4828: The file contains a character starting at offset 0x529 that is illegal in the current source character set (codepage 65001).
-D:\apps\sigpack-1.2.7\sigpack-1.2.7\sigpack\sigpack.h(1,1): warning C4828: The file contains a character starting at offset 0x595 that is illegal in the current source character set (codepage 65001).
-D:\apps\sigpack-1.2.7\sigpack-1.2.7\sigpack\sigpack.h(1,1): warning C4828: The file contains a character starting at offset 0x609 that is illegal in the current source character set (codepage 65001).
-D:\apps\sigpack-1.2.7\sigpack-1.2.7\sigpack\sigpack.h(1,1): warning C4828: The file contains a character starting at offset 0x672 that is illegal in the current source character set (codepage 65001).
-D:\apps\sigpack-1.2.7\sigpack-1.2.7\sigpack\sigpack.h(1,1): warning C4828: The file contains a character starting at offset 0x732 that is illegal in the current source character set (codepage 65001).
-D:\apps\sigpack-1.2.7\sigpack-1.2.7\sigpack\sigpack.h(1,1): warning C4828: The file contains a character starting at offset 0x7ea that is illegal in the current source character set (codepage 65001).
+﻿  playerInterface.cpp
   AudioV2.vcxproj -> D:\project\AudioV2\x64\Debug\AudioV2.exe
