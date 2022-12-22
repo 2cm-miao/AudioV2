@@ -92,6 +92,31 @@ AudioV2::AudioV2(QWidget *parent)
     volumeButton->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
     volumeButton->setIconSize(iconSize);
 
+    // play speech list
+    playSpeech = new QMenu;
+    playSpeechList = new QPushButton;
+    playSpeechList->setCheckable(true);
+    playSpeechItemGroup = new QActionGroup(this);
+    QStringList playspeechItemList;
+    playspeechItemList << tr("0.5x") << tr("0.7x") << tr("1.0x") << tr("1.5x") << tr("2.0x");
+    float speeds[] = { 0.5, 0.7, 1.0, 1.5, 1.7, 2.0 };
+
+    for (int i = 0; i < playspeechItemList.size(); i++)
+    {
+        QAction* pSpeedItem = playSpeech->addAction(playspeechItemList.at(i));
+        pSpeedItem->setData(QVariant::fromValue(speeds[i]));
+        pSpeedItem->setCheckable(true);
+        playSpeechItemGroup->addAction(pSpeedItem);
+        if (i == 10)  pSpeedItem->setChecked(true);
+    }
+
+    connect(playSpeechItemGroup, SIGNAL(triggered(QAction*)), this, SLOT(setPlaySpeechFunction(QAction*)));
+
+    playSpeechList = new QPushButton;
+    playSpeechList->setText("1.0x");
+    playSpeechList->setFixedSize(60, 30);
+    playSpeechList->setMenu(playSpeech);
+
     // seekBackward button
     seekBackwardButton = new QToolButton;
     seekBackwardButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
@@ -122,6 +147,7 @@ AudioV2::AudioV2(QWidget *parent)
 
     // right button layout
     rightButtonsLayout = new QHBoxLayout;
+    rightButtonsLayout->addWidget(playSpeechList);
     rightButtonsLayout->addWidget(volumeButton);
     rightButtonsLayout->setAlignment(Qt::AlignRight);
 
@@ -245,6 +271,16 @@ void AudioV2::getDuration(qint64 durationTime)
 void AudioV2::durationChanged(qint64 duration)
 {
     videoSlider->setRange(0, duration);
+}
+
+// play speech setting function
+void AudioV2::setPlaySpeechFunction(QAction* action)
+{
+    action->setChecked(true);
+    playSpeechList->setToolTip(action->text());
+    playSpeechList->setText(action->text());
+
+    mediaPlayer->setPlaybackRate(qreal(action->data().toFloat()));
 }
 
 // spectum process function

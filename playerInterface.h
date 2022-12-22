@@ -60,17 +60,24 @@ private:
     QSlider *videoSlider = nullptr;
 
     QMenu *fileMenuBar = nullptr;
+    QMenu *playSpeech = nullptr;
 
     QAction *fileAction = nullptr;
     QAction *spectumAction = nullptr;
+
+    QActionGroup *playSpeechItemGroup = nullptr;
+
+    QPushButton *playSpeechList = nullptr;
 
     QToolButton *playButton = nullptr;
     QToolButton *pauseButton = nullptr;
     QToolButton *volumeButton = nullptr;
     QToolButton *seekBackwardButton = nullptr;
     QToolButton *seekForwardButton = nullptr;
+    QToolButton* playSpeechButton = nullptr;
 
     QWidget *widget = nullptr;
+
     QVideoWidget *videoWidget = nullptr;
 
     QVBoxLayout *mainLayout = nullptr;
@@ -91,6 +98,7 @@ private slots:
     void spectumProcessAction();
     void getDuration(qint64 durationTime);
     void convertPlaytimeToString(qint64 durationTime);
+    void setPlaySpeechFunction(QAction* action);
 };
 
 #endif
