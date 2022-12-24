@@ -45,47 +45,49 @@ private:
 
     QMediaPlayer::PlaybackState m_playerState = QMediaPlayer::StoppedState;
 
-    QMediaPlayer *mediaPlayer = nullptr;
+    QMediaPlayer* mediaPlayer = nullptr;
 
-    QAudioOutput *audioWidget = nullptr;
+    QAudioOutput* audioWidget = nullptr;
 
     QString currentVideoDirectory;
     QString currentFilePath;
 
-    QLabel *currentTimeLabel = nullptr;
-    QLabel *timeLabel = nullptr;
-    QLabel *slashLabel = nullptr;
+    QLabel* currentTimeLabel = nullptr;
+    QLabel* timeLabel = nullptr;
+    QLabel* slashLabel = nullptr;
 
-    QSlider *frameSlider = nullptr;
-    QSlider *videoSlider = nullptr;
+    QSlider* frameSlider = nullptr;
+    QSlider* videoSlider = nullptr;
+    QSlider* volumeSlider = nullptr;
 
-    QMenu *fileMenuBar = nullptr;
-    QMenu *playSpeech = nullptr;
+    QMenu* fileMenuBar = nullptr;
+    QMenu* playSpeech = nullptr;
 
-    QAction *fileAction = nullptr;
-    QAction *spectumAction = nullptr;
+    QAction* fileAction = nullptr;
+    QAction* spectumAction = nullptr;
 
-    QActionGroup *playSpeechItemGroup = nullptr;
+    QActionGroup* playSpeechItemGroup = nullptr;
 
-    QPushButton *playSpeechList = nullptr;
+    QPushButton* playSpeechList = nullptr;
 
-    QToolButton *playButton = nullptr;
-    QToolButton *pauseButton = nullptr;
-    QToolButton *volumeButton = nullptr;
-    QToolButton *seekBackwardButton = nullptr;
-    QToolButton *seekForwardButton = nullptr;
-    QToolButton* playSpeechButton = nullptr;
+    QToolButton* playButton = nullptr;
+    QToolButton* pauseButton = nullptr;
+    QToolButton* volumeButton = nullptr;
+    QToolButton* seekBackwardButton = nullptr;
+    QToolButton* seekForwardButton = nullptr;
 
-    QWidget *widget = nullptr;
+    QWidget* widget = nullptr;
 
-    QVideoWidget *videoWidget = nullptr;
+    QVideoWidget* videoWidget = nullptr;
 
-    QVBoxLayout *mainLayout = nullptr;
-    QHBoxLayout *buttonLayout = nullptr;
-    QHBoxLayout *leftButtonsLayout = nullptr;
-    QHBoxLayout *rightButtonsLayout = nullptr;
-    QHBoxLayout *playerLayout = nullptr;
-    QHBoxLayout *sliderLayout = nullptr;
+    QVBoxLayout* mainLayout = nullptr;
+    QHBoxLayout* buttonLayout = nullptr;
+    QHBoxLayout* leftButtonsLayout = nullptr;
+    QHBoxLayout* rightButtonsLayout = nullptr;
+    QHBoxLayout* playerLayout = nullptr;
+    QHBoxLayout* sliderLayout = nullptr;
+
+    bool volumeButtonFlag;
 
 private slots:
     void open(const QString& fileName);
@@ -99,6 +101,10 @@ private slots:
     void getDuration(qint64 durationTime);
     void convertPlaytimeToString(qint64 durationTime);
     void setPlaySpeechFunction(QAction* action);
+    void seekPlayBackFunction();
+    void seekPlayForwardFunction();
+    void turnOffVolume();
+    void volumeSetting();
 };
 
 #endif

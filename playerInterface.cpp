@@ -91,6 +91,18 @@ AudioV2::AudioV2(QWidget *parent)
     volumeButton = new QToolButton;
     volumeButton->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
     volumeButton->setIconSize(iconSize);
+    volumeButtonFlag = false;
+
+    connect(volumeButton, &QToolButton::clicked, this, &AudioV2::turnOffVolume);
+
+    // volume slider
+    volumeSlider = new QSlider(Qt::Horizontal);
+    volumeSlider->setRange(0, 100);
+    volumeSlider->setFixedWidth(100);
+    volumeSlider->setSliderPosition(50);
+    audioWidget->setVolume(0.5);
+
+    connect(volumeSlider, &QAbstractSlider::sliderReleased, this, &AudioV2::volumeSetting);
 
     // play speech list
     playSpeech = new QMenu;
@@ -122,14 +134,19 @@ AudioV2::AudioV2(QWidget *parent)
     seekBackwardButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
     seekBackwardButton->setIconSize(iconSize);
 
+    connect(seekBackwardButton, &QToolButton::clicked, this, &AudioV2::seekPlayBackFunction);
+
     // seekForward button
     seekForwardButton = new QToolButton;
     seekForwardButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
     seekForwardButton->setIconSize(iconSize);
 
+    connect(seekForwardButton, &QToolButton::clicked, this, &AudioV2::seekPlayForwardFunction);
+
     //video slider
     videoSlider = new QSlider(Qt::Horizontal);
     videoSlider->setRange(0, 0);
+
     connect(videoSlider, &QAbstractSlider::sliderMoved, this, &AudioV2::setPosition);
 
     /*
@@ -149,6 +166,7 @@ AudioV2::AudioV2(QWidget *parent)
     rightButtonsLayout = new QHBoxLayout;
     rightButtonsLayout->addWidget(playSpeechList);
     rightButtonsLayout->addWidget(volumeButton);
+    rightButtonsLayout->addWidget(volumeSlider);
     rightButtonsLayout->setAlignment(Qt::AlignRight);
 
     // button layout
@@ -281,6 +299,44 @@ void AudioV2::setPlaySpeechFunction(QAction* action)
     playSpeechList->setText(action->text());
 
     mediaPlayer->setPlaybackRate(qreal(action->data().toFloat()));
+}
+
+// play back function
+void AudioV2::seekPlayBackFunction()
+{
+    int currentPosition = mediaPlayer->position();
+    currentPosition -= 5000;
+    mediaPlayer->setPosition(currentPosition);
+}
+
+// play forward function
+void AudioV2::seekPlayForwardFunction()
+{
+    int currentPosition = mediaPlayer->position();
+    currentPosition += 5000;
+    mediaPlayer->setPosition(currentPosition);
+}
+
+//set the volume to zero
+void AudioV2::turnOffVolume() {
+    if (volumeButtonFlag) {
+        volumeButton->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+        volumeButtonFlag = false;
+
+        int volumeNumber = volumeSlider->value();
+        audioWidget->setVolume((float)volumeNumber / 100.0);
+    }
+    else {
+        volumeButton->setIcon(style()->standardIcon(QStyle::SP_MediaVolumeMuted));
+        volumeButtonFlag = true;
+
+        audioWidget->setVolume(0);
+    }
+}
+
+void AudioV2::volumeSetting() {
+    int volumeNumber = volumeSlider->value();
+    audioWidget->setVolume((float)volumeNumber / 100.0);
 }
 
 // spectum process function
