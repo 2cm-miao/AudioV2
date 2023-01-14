@@ -3,13 +3,16 @@
 #ifndef MOVIEPLAYER_H
 #define MOVIEPLAYER_H
 
-#include <QtWidgets\QMainWindow>
-#include <QtMultimedia\QMediaplayer.h>
-#include <QtMultimediaWidgets\QVideoWidget>
+#include <QtWidgets/QMainWindow>
+#include <QtMultimedia/QMediaplayer.h>
+#include <QtMultimediaWidgets/QVideoWidget>
 #include <QtWidgets>
+#include <QtMultimedia/Qaudiodevice.h>
+#include <QtMultimedia/qmediadevices.h>
 #include "ui_AudioV2.h"
 
 #include "spectrumProcess.h"
+#include "qcustomplot.h"
 
 QT_BEGIN_NAMESPACE
 class QCheckBox;
@@ -49,12 +52,29 @@ private:
 
     QAudioOutput* audioWidget = nullptr;
 
+    //QMediaDevices* mediaDevice = nullptr;
+
+    //QAudioDevice* audioDevice = nullptr;
+
+    QAudioFormat* audioFormat = nullptr;
+
+    QWidget* widget = nullptr;
+
+    QCustomPlot* customPlot = nullptr;
+
+    QVideoWidget* videoWidget = nullptr;
+
+    QActionGroup* playSpeechItemGroup = nullptr;
+
+    QPushButton* playSpeechList = nullptr;
+
     QString currentVideoDirectory;
     QString currentFilePath;
 
     QLabel* currentTimeLabel = nullptr;
     QLabel* timeLabel = nullptr;
     QLabel* slashLabel = nullptr;
+    QLabel* dynamicSpectrumLabel = nullptr;
 
     QSlider* frameSlider = nullptr;
     QSlider* videoSlider = nullptr;
@@ -66,19 +86,11 @@ private:
     QAction* fileAction = nullptr;
     QAction* spectumAction = nullptr;
 
-    QActionGroup* playSpeechItemGroup = nullptr;
-
-    QPushButton* playSpeechList = nullptr;
-
     QToolButton* playButton = nullptr;
     QToolButton* pauseButton = nullptr;
     QToolButton* volumeButton = nullptr;
     QToolButton* seekBackwardButton = nullptr;
     QToolButton* seekForwardButton = nullptr;
-
-    QWidget* widget = nullptr;
-
-    QVideoWidget* videoWidget = nullptr;
 
     QVBoxLayout* mainLayout = nullptr;
     QHBoxLayout* buttonLayout = nullptr;
@@ -86,6 +98,7 @@ private:
     QHBoxLayout* rightButtonsLayout = nullptr;
     QHBoxLayout* playerLayout = nullptr;
     QHBoxLayout* sliderLayout = nullptr;
+    QHBoxLayout* dynamicSpectrumLayout = nullptr;
 
     bool volumeButtonFlag;
 
@@ -105,6 +118,8 @@ private slots:
     void seekPlayForwardFunction();
     void turnOffVolume();
     void volumeSetting();
+    void drawDynamicSpectrumBar();
+    void setInputDevice();
 };
 
 #endif

@@ -62,12 +62,12 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\apps\sigpack-1.2.7\sigpack-1.2.7\sigpack;D:\apps\armadillo-11.2.3\armadillo-11.2.3\include;D:\apps\ffmpeg-5.1.2-full_build-shared\include;D:\apps\qt\6.3.1\msvc2019_64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\apps\QcustomPlot;D:\apps\sigpack-1.2.7\sigpack-1.2.7\sigpack;D:\apps\armadillo-11.2.3\armadillo-11.2.3\include;D:\apps\ffmpeg-5.1.2-full_build-shared\include;D:\apps\qt\6.3.1\msvc2019_64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libopenblas.lib;Qt6Multimediad.lib;Qt6MultimediaWidgetsd.lib;libfftw3-3.lib;libfftw3f-3.lib;libfftw3l-3.lib;avcodec.lib;avdevice.lib;avfilter.lib;avformat.lib;avutil.lib;postproc.lib;swresample.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libopenblas.lib;Qt6Multimediad.lib;Qt6MultimediaWidgetsd.lib;libfftw3-3.lib;libfftw3f-3.lib;libfftw3l-3.lib;avcodec.lib;avdevice.lib;avfilter.lib;avformat.lib;avutil.lib;postproc.lib;swresample.lib;Qt6PrintSupportd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Qt\6.3.2\msvc2019_64\lib;D:\apps\armadillo-11.2.3\armadillo-11.2.3\examples\lib_win64;D:\apps\qt\6.3.1\msvc2019_64\lib;D:\apps\ffmpeg-5.1.2-full_build-shared\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -107,6 +107,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\apps\QcustomPlot\qcustomplot.cpp" />
+    <ClCompile Include="dynamicSpectrum.cpp" />
     <ClCompile Include="spectrumProcess.cpp" />
     <QtRcc Include="AudioV2.qrc" />
     <QtUic Include="AudioV2.ui" />
@@ -120,6 +122,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="..\..\apps\QcustomPlot\qcustomplot.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

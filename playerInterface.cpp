@@ -17,7 +17,9 @@
 #include <QtWebEngineWidgets\QWebEngineView>
 #include <QtMultimedia\QMediaPlayer>
 #include <QtMultimedia\QAudioOutput>
+#include <Qtmultimedia\qaudiodevice.h>
 #include <Qdir>
+#include <qpainter.h>
 
 AudioV2::AudioV2(QWidget *parent)
     : QMainWindow(parent)
@@ -72,6 +74,7 @@ AudioV2::AudioV2(QWidget *parent)
     playButton->setIconSize(iconSize);
     playButton->setToolTip(tr("Play"));
     playButton->setEnabled(false);
+
     connect(playButton, &QAbstractButton::clicked, this, &AudioV2::playFunction);
 
     // time label
@@ -110,7 +113,7 @@ AudioV2::AudioV2(QWidget *parent)
     playSpeechList->setCheckable(true);
     playSpeechItemGroup = new QActionGroup(this);
     QStringList playspeechItemList;
-    playspeechItemList << tr("0.5x") << tr("0.7x") << tr("1.0x") << tr("1.5x") << tr("2.0x");
+    playspeechItemList << tr("0.5x") << tr("0.7x") << tr("1.0x") << tr("1.5x") << tr("1.7x") << tr("2.0x");
     float speeds[] = { 0.5, 0.7, 1.0, 1.5, 1.7, 2.0 };
 
     for (int i = 0; i < playspeechItemList.size(); i++)
@@ -143,11 +146,15 @@ AudioV2::AudioV2(QWidget *parent)
 
     connect(seekForwardButton, &QToolButton::clicked, this, &AudioV2::seekPlayForwardFunction);
 
-    //video slider
+    // video slider
     videoSlider = new QSlider(Qt::Horizontal);
     videoSlider->setRange(0, 0);
 
     connect(videoSlider, &QAbstractSlider::sliderMoved, this, &AudioV2::setPosition);
+
+    // dynamic spectrum
+    customPlot = new QCustomPlot;
+    drawDynamicSpectrumBar();
 
     /*
     * layouts
@@ -182,18 +189,24 @@ AudioV2::AudioV2(QWidget *parent)
     playerLayout = new QHBoxLayout; 
     playerLayout->addWidget(videoWidget);
 
+    // dynamic spectrum layout
+    dynamicSpectrumLayout = new QHBoxLayout;
+    //dynamicSpectrumLayout->addWidget(dynamicSpectrumLabel);
+    dynamicSpectrumLayout->addWidget(customPlot);
+
     // main layout
     widget = new QWidget();
     mainLayout = new QVBoxLayout(widget);
     mainLayout->addLayout(playerLayout);
     mainLayout->addLayout(sliderLayout);
     mainLayout->addLayout(buttonLayout);
+    mainLayout->addLayout(dynamicSpectrumLayout);
 
     this -> setCentralWidget(widget);
     setLayout(mainLayout);
 
     setWindowTitle(tr("Video Player"));
-    resize(1200, 700);
+    resize(1200, 900);
 }
 
 AudioV2::~AudioV2()
@@ -226,7 +239,6 @@ void AudioV2::openFileAction()
     if (!fileName.isEmpty())
         open(fileName);
 }
-
 
 // play the video function
 void AudioV2::playFunction()
@@ -334,10 +346,21 @@ void AudioV2::turnOffVolume() {
     }
 }
 
+// volume function
 void AudioV2::volumeSetting() {
     int volumeNumber = volumeSlider->value();
     audioWidget->setVolume((float)volumeNumber / 100.0);
 }
+
+// dynamic spectrum
+//bool AudioV2::eventFilter(QObject* obj, QEvent* event)
+//{
+//    if (obj == dynamicSpectrumLabel && event->type() == QEvent::Paint)
+//    {
+//        drawDynamicSpectrumBar();
+//    }
+//    return QWidget::eventFilter(obj, event);
+//}
 
 // spectum process function
 void AudioV2::spectumProcessAction()

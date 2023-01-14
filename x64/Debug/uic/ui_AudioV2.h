@@ -16,15 +16,17 @@
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
+#include <qcustomplot.h>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_AudioV2Class
 {
 public:
+    QWidget *centralWidget;
+    QCustomPlot *widget;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
-    QWidget *centralWidget;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *AudioV2Class)
@@ -32,15 +34,19 @@ public:
         if (AudioV2Class->objectName().isEmpty())
             AudioV2Class->setObjectName(QString::fromUtf8("AudioV2Class"));
         AudioV2Class->resize(600, 400);
+        centralWidget = new QWidget(AudioV2Class);
+        centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
+        widget = new QCustomPlot(centralWidget);
+        widget->setObjectName(QString::fromUtf8("widget"));
+        widget->setGeometry(QRect(130, 140, 120, 80));
+        AudioV2Class->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(AudioV2Class);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
+        menuBar->setGeometry(QRect(0, 0, 600, 22));
         AudioV2Class->setMenuBar(menuBar);
         mainToolBar = new QToolBar(AudioV2Class);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
-        AudioV2Class->addToolBar(mainToolBar);
-        centralWidget = new QWidget(AudioV2Class);
-        centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
-        AudioV2Class->setCentralWidget(centralWidget);
+        AudioV2Class->addToolBar(Qt::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(AudioV2Class);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
         AudioV2Class->setStatusBar(statusBar);
