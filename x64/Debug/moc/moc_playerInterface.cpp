@@ -24,7 +24,7 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_AudioV2_t {
-    uint offsetsAndSizes[54];
+    uint offsetsAndSizes[56];
     char stringdata0[8];
     char stringdata1[5];
     char stringdata2[1];
@@ -51,7 +51,8 @@ struct qt_meta_stringdata_AudioV2_t {
     char stringdata23[14];
     char stringdata24[14];
     char stringdata25[23];
-    char stringdata26[15];
+    char stringdata26[19];
+    char stringdata27[16];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_AudioV2_t::offsetsAndSizes) + ofs), len 
@@ -83,7 +84,8 @@ static const qt_meta_stringdata_AudioV2_t qt_meta_stringdata_AudioV2 = {
         QT_MOC_LITERAL(318, 13),  // "turnOffVolume"
         QT_MOC_LITERAL(332, 13),  // "volumeSetting"
         QT_MOC_LITERAL(346, 22),  // "drawDynamicSpectrumBar"
-        QT_MOC_LITERAL(369, 14)   // "setInputDevice"
+        QT_MOC_LITERAL(369, 18),  // "audioBufferProcess"
+        QT_MOC_LITERAL(388, 15)   // "audioFFTProcess"
     },
     "AudioV2",
     "open",
@@ -111,7 +113,8 @@ static const qt_meta_stringdata_AudioV2_t qt_meta_stringdata_AudioV2 = {
     "turnOffVolume",
     "volumeSetting",
     "drawDynamicSpectrumBar",
-    "setInputDevice"
+    "audioBufferProcess",
+    "audioFFTProcess"
 };
 #undef QT_MOC_LITERAL
 
@@ -121,7 +124,7 @@ static const uint qt_meta_data_AudioV2[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-      17,   14, // methods
+      18,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -129,23 +132,24 @@ static const uint qt_meta_data_AudioV2[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,  116,    2, 0x08,    1 /* Private */,
-       4,    0,  119,    2, 0x08,    3 /* Private */,
-       5,    0,  120,    2, 0x08,    4 /* Private */,
-       6,    1,  121,    2, 0x08,    5 /* Private */,
-       9,    1,  124,    2, 0x08,    7 /* Private */,
-      11,    1,  127,    2, 0x08,    9 /* Private */,
-      13,    1,  130,    2, 0x08,   11 /* Private */,
-      14,    0,  133,    2, 0x08,   13 /* Private */,
-      15,    1,  134,    2, 0x08,   14 /* Private */,
-      17,    1,  137,    2, 0x08,   16 /* Private */,
-      18,    1,  140,    2, 0x08,   18 /* Private */,
-      21,    0,  143,    2, 0x08,   20 /* Private */,
-      22,    0,  144,    2, 0x08,   21 /* Private */,
-      23,    0,  145,    2, 0x08,   22 /* Private */,
-      24,    0,  146,    2, 0x08,   23 /* Private */,
-      25,    0,  147,    2, 0x08,   24 /* Private */,
-      26,    0,  148,    2, 0x08,   25 /* Private */,
+       1,    1,  122,    2, 0x08,    1 /* Private */,
+       4,    0,  125,    2, 0x08,    3 /* Private */,
+       5,    0,  126,    2, 0x08,    4 /* Private */,
+       6,    1,  127,    2, 0x08,    5 /* Private */,
+       9,    1,  130,    2, 0x08,    7 /* Private */,
+      11,    1,  133,    2, 0x08,    9 /* Private */,
+      13,    1,  136,    2, 0x08,   11 /* Private */,
+      14,    0,  139,    2, 0x08,   13 /* Private */,
+      15,    1,  140,    2, 0x08,   14 /* Private */,
+      17,    1,  143,    2, 0x08,   16 /* Private */,
+      18,    1,  146,    2, 0x08,   18 /* Private */,
+      21,    0,  149,    2, 0x08,   20 /* Private */,
+      22,    0,  150,    2, 0x08,   21 /* Private */,
+      23,    0,  151,    2, 0x08,   22 /* Private */,
+      24,    0,  152,    2, 0x08,   23 /* Private */,
+      25,    0,  153,    2, 0x08,   24 /* Private */,
+      26,    0,  154,    2, 0x08,   25 /* Private */,
+      27,    0,  155,    2, 0x08,   26 /* Private */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QString,    3,
@@ -159,6 +163,7 @@ static const uint qt_meta_data_AudioV2[] = {
     QMetaType::Void, QMetaType::LongLong,   16,
     QMetaType::Void, QMetaType::LongLong,   16,
     QMetaType::Void, 0x80000000 | 19,   20,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -191,7 +196,8 @@ void AudioV2::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         case 13: _t->turnOffVolume(); break;
         case 14: _t->volumeSetting(); break;
         case 15: _t->drawDynamicSpectrumBar(); break;
-        case 16: _t->setInputDevice(); break;
+        case 16: _t->audioBufferProcess(); break;
+        case 17: _t->audioFFTProcess(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -216,7 +222,7 @@ const QMetaObject AudioV2::staticMetaObject = { {
     nullptr,
 qt_incomplete_metaTypeArray<qt_meta_stringdata_AudioV2_t
 , QtPrivate::TypeAndForceComplete<AudioV2, std::true_type>
-, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<const QString &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QMediaPlayer::PlaybackState, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<qint64, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<qint64, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<qint64, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<qint64, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QAction *, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>
+, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<const QString &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QMediaPlayer::PlaybackState, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<qint64, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<qint64, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<qint64, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<qint64, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QAction *, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>
 
 
 >,
@@ -243,13 +249,13 @@ int AudioV2::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 17)
+        if (_id < 18)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 17;
+        _id -= 18;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 17)
+        if (_id < 18)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 17;
+        _id -= 18;
     }
     return _id;
 }

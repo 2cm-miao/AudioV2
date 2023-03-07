@@ -1,6 +1,2 @@
-﻿  moc playerInterface.h
-  dynamicSpectrum.cpp
-  main.cpp
-  playerInterface.cpp
-  moc_playerInterface.cpp
+﻿  playerInterface.cpp
   AudioV2.vcxproj -> D:\project\AudioV2\x64\Debug\AudioV2.exe

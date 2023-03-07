@@ -9,6 +9,8 @@
 #include <QtWidgets>
 #include <QtMultimedia/Qaudiodevice.h>
 #include <QtMultimedia/qmediadevices.h>
+#include <qbuffer.h>
+#include <fftw3.h>
 #include "ui_AudioV2.h"
 
 #include "spectrumProcess.h"
@@ -33,6 +35,7 @@ class QMediaPlayer;
 class QAudioOutput;
 class QVideoWidget;
 class QtWidgets;
+class QBuffer;
 QT_END_NAMESPACE
 
 class AudioV2 : public QMainWindow
@@ -52,9 +55,7 @@ private:
 
     QAudioOutput* audioWidget = nullptr;
 
-    //QMediaDevices* mediaDevice = nullptr;
-
-    //QAudioDevice* audioDevice = nullptr;
+    QBuffer inputBuffer;
 
     QAudioFormat* audioFormat = nullptr;
 
@@ -67,6 +68,8 @@ private:
     QActionGroup* playSpeechItemGroup = nullptr;
 
     QPushButton* playSpeechList = nullptr;
+
+    QVector<double> audioSample;
 
     QString currentVideoDirectory;
     QString currentFilePath;
@@ -100,6 +103,13 @@ private:
     QHBoxLayout* sliderLayout = nullptr;
     QHBoxLayout* dynamicSpectrumLayout = nullptr;
 
+    QVector<double> mIndices;
+    QVector<double> mFftIndices;
+
+    fftw_plan mFftPlan;
+    double* mFftIn;
+    double* mFftOut;
+
     bool volumeButtonFlag;
 
 private slots:
@@ -119,7 +129,8 @@ private slots:
     void turnOffVolume();
     void volumeSetting();
     void drawDynamicSpectrumBar();
-    void setInputDevice();
+    void audioBufferProcess();
+    void audioFFTProcess();
 };
 
 #endif

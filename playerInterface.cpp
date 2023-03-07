@@ -52,9 +52,16 @@ AudioV2::AudioV2(QWidget *parent)
     /*
     * video player
     */
+    inputBuffer.open(QBuffer::ReadWrite);
+
+    QAudioFormat audioFMT;
+    audioFMT.setSampleRate(44000);
+
+    QAudioDevice audioDevice;
+
     mediaPlayer = new QMediaPlayer();
     videoWidget = new QVideoWidget();
-    audioWidget = new QAudioOutput();
+    audioWidget = new QAudioOutput(&inputBuffer);
     mediaPlayer->setAudioOutput(audioWidget);
     mediaPlayer->setVideoOutput(videoWidget);
 
@@ -62,6 +69,7 @@ AudioV2::AudioV2(QWidget *parent)
     connect(mediaPlayer, &QMediaPlayer::positionChanged, this, &AudioV2::positionChanged);
     connect(mediaPlayer, &QMediaPlayer::durationChanged, this, &AudioV2::durationChanged);
     connect(mediaPlayer, SIGNAL(durationChanged(qint64)),this, SLOT(getDuration(qint64)));
+    connect(mediaPlayer, &QMediaPlayer::playbackStateChanged, this, &AudioV2::audioBufferProcess);
 
     /*
     * buttons and labels
@@ -207,10 +215,29 @@ AudioV2::AudioV2(QWidget *parent)
 
     setWindowTitle(tr("Video Player"));
     resize(1200, 900);
+
+    for (int i = 0; i < 96000; i++) {
+        mIndices.append((double)i);
+        audioSample.append(0);
+    }
+
+    double freqStep = (double)48000 / (double)96000;
+    double f = 20;
+    while (f < 20000) {
+        mFftIndices.append(f);
+        f += freqStep;
+    }
+
+    mFftIn = fftw_alloc_real(96000);
+    mFftOut = fftw_alloc_real(96000);
+    mFftPlan = fftw_plan_r2r_1d(96000, mFftIn, mFftOut, FFTW_R2HC, FFTW_ESTIMATE);
 }
 
-AudioV2::~AudioV2()
-{}
+AudioV2::~AudioV2() {
+    fftw_free(mFftIn);
+    fftw_free(mFftOut);
+    fftw_destroy_plan(mFftPlan);
+}
 
 // open file function
 void AudioV2::open(const QString& fileName)
